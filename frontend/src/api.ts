@@ -150,25 +150,40 @@ export type PortfolioAnalytics = {
   warnings: string[];
 };
 
+export type PortfolioNewsBrief = {
+  material_story_count: number;
+  affected_portfolio_weight: number;
+  summary: string;
+};
+
 export type PortfolioNewsArticle = {
   id: string;
   headline: string;
   summary: string;
   source: string;
+  additional_sources: string[];
+
   url: string;
   image_url: string | null;
   published_at: string;
+
   affected_tickers: string[];
   affected_portfolio_weight: number;
+
+  category: string;
   importance: "high" | "medium" | "low";
   relevance_score: number;
   why_it_matters: string;
+
+  duplicate_count: number;
 };
 
 export type PortfolioNewsFeed = {
   portfolio_id: string;
   portfolio_name: string;
   generated_at: string;
+
+  brief: PortfolioNewsBrief;
   articles: PortfolioNewsArticle[];
   warnings: string[];
 };
@@ -186,13 +201,23 @@ export async function getPortfolioAnalytics(
 export async function getPortfolioNews(
   portfolioId: string,
   days = 7,
+  importantOnly = true,
+  category = "all",
 ): Promise<PortfolioNewsFeed> {
-  const response = await api.get<PortfolioNewsFeed>(
-    `/news/portfolios/${portfolioId}`,
-    {
-      params: { days },
-    },
-  );
+  const response =
+    await api.get<PortfolioNewsFeed>(
+      `/news/portfolios/${portfolioId}`,
+      {
+        params: {
+          days,
+          important_only: importantOnly,
+          category:
+            category === "all"
+              ? undefined
+              : category,
+        },
+      },
+    );
 
   return response.data;
 }
