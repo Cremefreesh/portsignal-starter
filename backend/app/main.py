@@ -7,6 +7,9 @@ from app.core.config import get_settings
 from app.api.market_data import (
     router as market_data_router,
 )
+from app.api.analytics import (
+    router as analytics_router,
+)
 
 settings = get_settings()
 
@@ -27,6 +30,7 @@ app.add_middleware(
 app.include_router(portfolios_router, prefix="/api")
 app.include_router(news_router, prefix="/api")
 app.include_router(market_data_router, prefix="/api")
+app.include_router(analytics_router, prefix="/api")
 
 
 @app.get("/health")

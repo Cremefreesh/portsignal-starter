@@ -78,3 +78,25 @@ class FinnhubClient:
                 "symbol": symbol,
             },
         )
+
+    async def get_company_news(
+        self,
+        symbol: str,
+        from_date: str,
+        to_date: str,
+    ) -> list[dict[str, Any]]:
+        payload = await self._get(
+            "/company-news",
+            {
+                "symbol": symbol,
+                "from": from_date,
+                "to": to_date,
+            },
+        )
+
+        if not isinstance(payload, list):
+            raise FinnhubAPIError(
+                "Finnhub returned invalid company news"
+            )
+
+        return payload
