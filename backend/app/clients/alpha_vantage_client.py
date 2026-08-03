@@ -1,3 +1,5 @@
+import asyncio
+from time import monotonic
 from typing import Any
 
 import httpx
@@ -12,6 +14,10 @@ class AlphaVantageAPIError(RuntimeError):
 class AlphaVantageClient:
     BASE_URL = "https://www.alphavantage.co/query"
 
+    # Alpha Vantage's free tier asked us to stay below
+    # one request per second. A small buffer makes this safer.
+    MIN_REQUEST_INTERVAL_SECONDS = 1.1
+
     def __init__(self) -> None:
         settings = get_settings()
 
@@ -22,6 +28,20 @@ class AlphaVantageClient:
 
         self.api_key = settings.alpha_vantage_api_key
 
+        self._request_lock = asyncio.Lock()
+        self._last_request_time = 0.0
+
+    async def _wait_for_rate_limit(self) -> None:
+        elapsed = monotonic() - self._last_request_time
+
+        remaining_wait = (
+            self.MIN_REQUEST_INTERVAL_SECONDS
+            - elapsed
+        )
+
+        if remaining_wait > 0:
+            await asyncio.sleep(remaining_wait)
+
     async def _get(
         self,
         params: dict[str, Any],
@@ -31,18 +51,26 @@ class AlphaVantageClient:
             "apikey": self.api_key,
         }
 
-        async with httpx.AsyncClient(
-            timeout=20.0,
-        ) as client:
-            response = await client.get(
-                self.BASE_URL,
-                params=request_params,
-            )
+        # Only one Alpha Vantage request may pass through
+        # this section at a time.
+        async with self._request_lock:
+            await self._wait_for_rate_limit()
+
+            async with httpx.AsyncClient(
+                timeout=20.0,
+            ) as client:
+                response = await client.get(
+                    self.BASE_URL,
+                    params=request_params,
+                )
+
+            self._last_request_time = monotonic()
 
         if response.status_code >= 400:
             raise AlphaVantageAPIError(
                 "Alpha Vantage request failed: "
-                f"HTTP {response.status_code}"
+                f"HTTP {response.status_code}. "
+                f"Response: {response.text[:300]}"
             )
 
         try:
