@@ -1,3 +1,24 @@
+                 React
+                    │
+        ┌───────────┼───────────┐
+        │           │           │
+ Dashboard     Analytics      News
+        │           │           │
+        └───────────┼───────────┘
+                    │
+               FastAPI API
+                    │
+      ┌─────────────┼──────────────┐
+      │             │              │
+ Portfolio      Analytics      News Ranking
+ Repository      Engine         Engine
+      │             │              │
+      ├─────────────┼──────────────┤
+      │             │              │
+  Supabase      Alpha Vantage   Finnhub
+
+
+
 # PortSignal
 
 A portfolio intelligence and personalised financial-news platform.
