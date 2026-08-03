@@ -8,6 +8,8 @@ class PortfolioNewsArticle(BaseModel):
     headline: str
     summary: str
     source: str
+    additional_sources: list[str]
+
     url: str
     image_url: str | None
     published_at: datetime
@@ -15,9 +17,18 @@ class PortfolioNewsArticle(BaseModel):
     affected_tickers: list[str]
     affected_portfolio_weight: float
 
+    category: str
     importance: str
     relevance_score: float
     why_it_matters: str
+
+    duplicate_count: int
+
+
+class PortfolioNewsBrief(BaseModel):
+    material_story_count: int
+    affected_portfolio_weight: float
+    summary: str
 
 
 class PortfolioNewsFeed(BaseModel):
@@ -25,5 +36,6 @@ class PortfolioNewsFeed(BaseModel):
     portfolio_name: str
     generated_at: datetime
 
+    brief: PortfolioNewsBrief
     articles: list[PortfolioNewsArticle]
     warnings: list[str]

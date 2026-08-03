@@ -30,6 +30,12 @@ async def get_portfolio_news(
         ge=1,
         le=30,
     ),
+    important_only: bool = Query(
+        default=True,
+    ),
+    category: str | None = Query(
+        default=None,
+    ),
 ) -> PortfolioNewsFeed:
     try:
         feed = (
@@ -37,6 +43,8 @@ async def get_portfolio_news(
             .get_portfolio_news(
                 portfolio_id=portfolio_id,
                 days=days,
+                important_only=important_only,
+                category=category,
             )
         )
     except ValueError as error:
