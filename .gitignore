@@ -1,0 +1,100 @@
+# ==========================
+# Python
+# ==========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Python tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# ==========================
+# Node / React
+# ==========================
+node_modules/
+dist/
+build/
+coverage/
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Vite
+.vite/
+
+# ==========================
+# macOS
+# ==========================
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ==========================
+# VS Code
+# ==========================
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+
+# ==========================
+# JetBrains
+# ==========================
+.idea/
+
+# ==========================
+# Supabase
+# ==========================
+.supabase/
+
+# Local Supabase env
+supabase/.temp/
+
+# ==========================
+# Logs
+# ==========================
+logs/
+*.log
+
+# ==========================
+# SQLite
+# ==========================
+*.sqlite
+*.sqlite3
+
+# ==========================
+# Secrets / Keys
+# ==========================
+*.pem
+*.key
+*.crt
+
+# ==========================
+# OS files
+# ==========================
+Thumbs.db
+Desktop.ini
+
+# ==========================
+# Generated data
+# ==========================
+tmp/
+temp/
+cache/
