@@ -119,3 +119,80 @@ export async function getPortfolioValuation(
 
   return response.data;
 }
+
+export type PortfolioHistoryPoint = {
+  date: string;
+  portfolio_value: number;
+  cumulative_return: number;
+};
+
+export type PortfolioAnalytics = {
+  portfolio_id: string;
+  portfolio_name: string;
+  benchmark_ticker: string;
+  observation_count: number;
+  start_date: string;
+  end_date: string;
+
+  annualised_return: number;
+  annualised_volatility: number;
+  beta: number;
+  capm_expected_return: number;
+  sharpe_ratio: number | null;
+  sortino_ratio: number | null;
+  maximum_drawdown: number;
+  historical_var_95: number;
+  concentration_hhi: number;
+  effective_holdings: number;
+  largest_position_weight: number;
+
+  history: PortfolioHistoryPoint[];
+  warnings: string[];
+};
+
+export type PortfolioNewsArticle = {
+  id: string;
+  headline: string;
+  summary: string;
+  source: string;
+  url: string;
+  image_url: string | null;
+  published_at: string;
+  affected_tickers: string[];
+  affected_portfolio_weight: number;
+  importance: "high" | "medium" | "low";
+  relevance_score: number;
+  why_it_matters: string;
+};
+
+export type PortfolioNewsFeed = {
+  portfolio_id: string;
+  portfolio_name: string;
+  generated_at: string;
+  articles: PortfolioNewsArticle[];
+  warnings: string[];
+};
+
+export async function getPortfolioAnalytics(
+  portfolioId: string,
+): Promise<PortfolioAnalytics> {
+  const response = await api.get<PortfolioAnalytics>(
+    `/analytics/portfolios/${portfolioId}`,
+  );
+
+  return response.data;
+}
+
+export async function getPortfolioNews(
+  portfolioId: string,
+  days = 7,
+): Promise<PortfolioNewsFeed> {
+  const response = await api.get<PortfolioNewsFeed>(
+    `/news/portfolios/${portfolioId}`,
+    {
+      params: { days },
+    },
+  );
+
+  return response.data;
+}

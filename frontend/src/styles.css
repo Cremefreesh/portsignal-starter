@@ -732,3 +732,189 @@ td small {
 .chart-legend-label {
   color: #aab2c2;
 }
+
+
+.app-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 16px;
+  padding: 18px 20px;
+}
+
+.navigation-links {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-link {
+  border-radius: 10px;
+  padding: 10px 15px;
+  color: #8c96aa;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #ffffff;
+  background: #222b40;
+}
+
+.page-heading {
+  margin: 32px 0 22px;
+}
+
+.page-heading > p:last-child {
+  margin-top: 12px;
+  color: #8c96aa;
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+}
+
+.analytics-metric {
+  padding: 20px;
+}
+
+.analytics-metric p {
+  margin-bottom: 12px;
+  color: #8c96aa;
+}
+
+.analytics-metric strong {
+  font-size: 1.7rem;
+}
+
+.analytics-chart-card {
+  margin-top: 16px;
+  padding: 26px;
+}
+
+.analytics-chart {
+  margin-top: 26px;
+}
+
+.news-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.news-card {
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+}
+
+.news-image {
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  object-fit: cover;
+}
+
+.news-card-body {
+  padding: 24px;
+}
+
+.news-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+  color: #8c96aa;
+  font-size: 0.78rem;
+}
+
+.importance-badge {
+  border-radius: 999px;
+  padding: 4px 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.importance-badge.high {
+  color: #ff9aaa;
+  background: #321921;
+}
+
+.importance-badge.medium {
+  color: #f6d56b;
+  background: #302916;
+}
+
+.importance-badge.low {
+  color: #8adcb0;
+  background: #173025;
+}
+
+.ticker-badges {
+  display: flex;
+  gap: 8px;
+  margin: 18px 0;
+}
+
+.ticker-badges span {
+  border-radius: 8px;
+  padding: 6px 9px;
+  color: #aab6ff;
+  background: #1b2340;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.news-impact {
+  margin: 18px 0;
+  border-left: 3px solid #596cff;
+  padding-left: 16px;
+}
+
+.news-impact p {
+  margin: 6px 0 0;
+  color: #8c96aa;
+}
+
+.article-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.empty-state {
+  padding: 28px;
+  color: #8c96aa;
+}
+
+@media (max-width: 1000px) {
+  .analytics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .news-card {
+    grid-template-columns: 1fr;
+  }
+
+  .news-image {
+    max-height: 260px;
+  }
+}
+
+@media (max-width: 650px) {
+  .app-navigation {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .navigation-links {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .analytics-grid {
+    grid-template-columns: 1fr;
+  }
+}

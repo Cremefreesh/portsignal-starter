@@ -14,6 +14,16 @@ import CreatePortfolioForm from "./components/CreatePortfolioForm";
 import PortfolioDetails from "./components/PortfolioDetails";
 import PortfolioSelector from "./components/PortfolioSelector";
 
+import {
+  Route,
+  Routes,
+} from "react-router-dom";
+
+import AppNavigation from "./components/AppNavigation";
+import AnalyticsPage from "./pages/AnalyticsPage";
+import NewsPage from "./pages/NewsPage";
+
+
 export default function App() {
   const [
     selectedPortfolio,
@@ -171,9 +181,54 @@ export default function App() {
               <h2>Loading portfolio…</h2>
             </section>
           ) : selectedPortfolio ? (
-            <PortfolioDetails
-              portfolio={selectedPortfolio}
-            />
+            <>
+              <AppNavigation />
+
+              <PortfolioSelector
+                portfolios={portfolios}
+                selectedPortfolioId={
+                  selectedPortfolio?.id ?? null
+                }
+                isLoading={isLoadingPortfolio}
+                onSelect={selectPortfolio}
+                onCreateNew={openCreatePortfolioScreen}
+              />
+
+              {isLoadingPortfolio ? (
+                <section className="card loading-card">
+                  <h2>Loading portfolio…</h2>
+                </section>
+              ) : (
+                <Routes>
+                  <Route
+                    path="/"
+                    element={
+                      <PortfolioDetails
+                        portfolio={selectedPortfolio}
+                      />
+                    }
+                  />
+
+                  <Route
+                    path="/analytics"
+                    element={
+                      <AnalyticsPage
+                        portfolio={selectedPortfolio}
+                      />
+                    }
+                  />
+
+                  <Route
+                    path="/news"
+                    element={
+                      <NewsPage
+                        portfolio={selectedPortfolio}
+                      />
+                    }
+                  />
+                </Routes>
+              )}
+            </>
           ) : null}
         </>
       )}
