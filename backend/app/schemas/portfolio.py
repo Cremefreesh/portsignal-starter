@@ -1,19 +1,40 @@
-from datetime import date
 from pydantic import BaseModel, Field
 
 
-class PositionInput(BaseModel):
+class PositionCreate(BaseModel):
     ticker: str = Field(min_length=1, max_length=20)
     quantity: float = Field(gt=0)
     average_cost: float = Field(ge=0)
     currency: str = Field(default="USD", min_length=3, max_length=3)
 
 
+class PositionUpdate(BaseModel):
+    quantity: float | None = Field(default=None, gt=0)
+    average_cost: float | None = Field(default=None, ge=0)
+    currency: str | None = Field(default=None, min_length=3, max_length=3)
+
+
+class PositionResponse(BaseModel):
+    id: str
+    ticker: str
+    quantity: float
+    average_cost: float
+    currency: str
+
+
 class PortfolioCreate(BaseModel):
     name: str = Field(min_length=1, max_length=100)
-    benchmark_ticker: str = "SPY"
-    base_currency: str = "USD"
-    positions: list[PositionInput] = []
+    benchmark_ticker: str = Field(default="SPY", min_length=1, max_length=20)
+    base_currency: str = Field(default="GBP", min_length=3, max_length=3)
+    positions: list[PositionCreate] = Field(default_factory=list)
+
+
+class PortfolioResponse(BaseModel):
+    id: str
+    name: str
+    benchmark_ticker: str
+    base_currency: str
+    positions: list[PositionResponse] = Field(default_factory=list)
 
 
 class PortfolioSummary(BaseModel):
@@ -21,9 +42,8 @@ class PortfolioSummary(BaseModel):
     name: str
     benchmark_ticker: str
     base_currency: str
-    total_value: float
-    day_change_pct: float
     positions_count: int
+    total_cost: float
 
 
 class RiskMetrics(BaseModel):
@@ -36,10 +56,3 @@ class RiskMetrics(BaseModel):
     historical_var_95: float
     concentration_hhi: float
     effective_number_of_holdings: float
-
-
-class MarketRegime(BaseModel):
-    score: int = Field(ge=0, le=100)
-    label: str
-    as_of: date
-    components: dict[str, float]

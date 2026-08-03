@@ -1,75 +1,146 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Response, status
 
-from app.core.config import get_settings
+from app.repositories.portfolio_repository import portfolio_repository
 from app.schemas.portfolio import (
-    MarketRegime,
     PortfolioCreate,
+    PortfolioResponse,
     PortfolioSummary,
-    RiskMetrics,
+    PositionCreate,
+    PositionResponse,
+    PositionUpdate,
 )
-from app.services.market_regime import calculate_market_regime
-from app.services.risk import calculate_risk_metrics
 
-router = APIRouter(prefix="/portfolios", tags=["portfolios"])
+router = APIRouter(
+    prefix="/portfolios",
+    tags=["portfolios"],
+)
 
 
-@router.get("", response_model=list[PortfolioSummary])
+@router.get(
+    "",
+    response_model=list[PortfolioSummary],
+)
 def list_portfolios() -> list[PortfolioSummary]:
-    return [
-        PortfolioSummary(
-            id="demo-portfolio",
-            name="Archie's Portfolio",
-            benchmark_ticker="SPY",
-            base_currency="GBP",
-            total_value=18240.50,
-            day_change_pct=0.84,
-            positions_count=6,
+    return portfolio_repository.list_portfolios()
+
+
+@router.post(
+    "",
+    response_model=PortfolioResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_portfolio(
+    payload: PortfolioCreate,
+) -> PortfolioResponse:
+    return portfolio_repository.create_portfolio(payload)
+
+
+@router.get(
+    "/{portfolio_id}",
+    response_model=PortfolioResponse,
+)
+def get_portfolio(
+    portfolio_id: str,
+) -> PortfolioResponse:
+    portfolio = portfolio_repository.get_portfolio(portfolio_id)
+
+    if portfolio is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Portfolio not found",
         )
-    ]
+
+    return portfolio
 
 
-@router.post("", response_model=PortfolioCreate, status_code=201)
-def create_portfolio(payload: PortfolioCreate) -> PortfolioCreate:
-    return payload
+@router.post(
+    "/{portfolio_id}/positions",
+    response_model=PositionResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def add_position(
+    portfolio_id: str,
+    payload: PositionCreate,
+) -> PositionResponse:
+    try:
+        position = portfolio_repository.add_position(
+            portfolio_id,
+            payload,
+        )
+    except ValueError as error:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=str(error),
+        ) from error
+
+    if position is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Portfolio not found",
+        )
+
+    return position
 
 
-@router.get("/{portfolio_id}/risk", response_model=RiskMetrics)
-def get_portfolio_risk(portfolio_id: str) -> RiskMetrics:
-    if portfolio_id != "demo-portfolio":
-        raise HTTPException(status_code=404, detail="Portfolio not found")
-
-    settings = get_settings()
-
-    portfolio_returns = [
-        0.004, -0.006, 0.009, 0.002, -0.011, 0.014, 0.003, -0.004,
-        0.008, 0.005, -0.003, 0.012, -0.007, 0.004, 0.006, -0.002,
-    ]
-    benchmark_returns = [
-        0.003, -0.004, 0.007, 0.001, -0.008, 0.010, 0.002, -0.003,
-        0.006, 0.004, -0.002, 0.008, -0.005, 0.003, 0.004, -0.001,
-    ]
-    weights = [0.26, 0.21, 0.18, 0.14, 0.12, 0.09]
-
-    result = calculate_risk_metrics(
-        portfolio_returns=portfolio_returns,
-        benchmark_returns=benchmark_returns,
-        weights=weights,
-        risk_free_rate=settings.risk_free_rate,
-        market_risk_premium=settings.market_risk_premium,
+@router.patch(
+    "/{portfolio_id}/positions/{position_id}",
+    response_model=PositionResponse,
+)
+def update_position(
+    portfolio_id: str,
+    position_id: str,
+    payload: PositionUpdate,
+) -> PositionResponse:
+    position = portfolio_repository.update_position(
+        portfolio_id,
+        position_id,
+        payload,
     )
-    return RiskMetrics(**result)
+
+    if position is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Portfolio or position not found",
+        )
+
+    return position
 
 
-@router.get("/{portfolio_id}/market-regime", response_model=MarketRegime)
-def get_market_regime(portfolio_id: str) -> MarketRegime:
-    if portfolio_id != "demo-portfolio":
-        raise HTTPException(status_code=404, detail="Portfolio not found")
-
-    result = calculate_market_regime(
-        market_momentum=0.08,
-        market_volatility=0.19,
-        safe_haven_demand=-0.01,
-        junk_bond_spread=0.035,
-        breadth=0.62,
+@router.delete(
+    "/{portfolio_id}/positions/{position_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def delete_position(
+    portfolio_id: str,
+    position_id: str,
+) -> Response:
+    deleted = portfolio_repository.delete_position(
+        portfolio_id,
+        position_id,
     )
-    return MarketRegime(**result)
+
+    if not deleted:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Portfolio or position not found",
+        )
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.delete(
+    "/{portfolio_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def delete_portfolio(
+    portfolio_id: str,
+) -> Response:
+    deleted = portfolio_repository.delete_portfolio(portfolio_id)
+
+    if not deleted:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Portfolio not found",
+        )
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
