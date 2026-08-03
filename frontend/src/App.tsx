@@ -12,7 +12,7 @@ import {
 
 import CreatePortfolioForm from "./components/CreatePortfolioForm";
 import PortfolioDetails from "./components/PortfolioDetails";
-import PortfolioSelector from "./components/PortfolioSelector";
+
 
 import {
   Route,
@@ -182,16 +182,16 @@ export default function App() {
             </section>
           ) : selectedPortfolio ? (
             <>
-              <AppNavigation />
-
-              <PortfolioSelector
+              <AppNavigation
                 portfolios={portfolios}
                 selectedPortfolioId={
                   selectedPortfolio?.id ?? null
                 }
                 isLoading={isLoadingPortfolio}
-                onSelect={selectPortfolio}
-                onCreateNew={openCreatePortfolioScreen}
+                onSelectPortfolio={selectPortfolio}
+                onCreatePortfolio={
+                  openCreatePortfolioScreen
+                }
               />
 
               {isLoadingPortfolio ? (

@@ -652,14 +652,6 @@ td small {
 }
 
 @media (max-width: 650px) {
-  .portfolio-selector {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .portfolio-selector-copy select {
-    min-width: 0;
-  }
 
   .allocation-heading {
     flex-direction: column;
@@ -904,10 +896,6 @@ td small {
 }
 
 @media (max-width: 650px) {
-  .app-navigation {
-    align-items: flex-start;
-    flex-direction: column;
-  }
 
   .navigation-links {
     width: 100%;
@@ -1000,5 +988,127 @@ td small {
 
   .news-controls {
     grid-template-columns: 1fr;
+  }
+}
+
+.top-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 18px;
+  padding: 16px 18px;
+}
+
+.top-navigation-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.brand-block {
+  flex-shrink: 0;
+  padding-right: 16px;
+  border-right: 1px solid #293143;
+}
+
+.brand-block .eyebrow {
+  margin-bottom: 4px;
+}
+
+.brand-block strong {
+  font-size: 0.95rem;
+}
+
+.portfolio-switcher {
+  display: flex;
+  gap: 7px;
+  min-width: 220px;
+  flex-direction: column;
+}
+
+.portfolio-switcher label {
+  color: #778297;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.portfolio-switcher select {
+  min-height: 40px;
+  padding-right: 38px;
+  font-weight: 700;
+}
+
+.navigation-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.nav-link {
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #8c96aa;
+  text-decoration: none;
+  font-weight: 750;
+  transition:
+    color 120ms ease,
+    background 120ms ease;
+}
+
+.nav-link:hover {
+  color: #e8ebf3;
+  background: #1a2231;
+}
+
+.nav-link.active {
+  color: #ffffff;
+  background: #29334c;
+}
+
+@media (max-width: 900px) {
+  .top-navigation {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .top-navigation-left {
+    flex-wrap: wrap;
+  }
+
+  .navigation-links {
+    width: 100%;
+    border-top: 1px solid #293143;
+    padding-top: 12px;
+  }
+}
+
+@media (max-width: 620px) {
+  .top-navigation-left {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .brand-block {
+    border-right: 0;
+    border-bottom: 1px solid #293143;
+    padding-right: 0;
+    padding-bottom: 12px;
+  }
+
+  .portfolio-switcher {
+    width: 100%;
+  }
+
+  .navigation-links {
+    overflow-x: auto;
+  }
+
+  .nav-link {
+    white-space: nowrap;
   }
 }
