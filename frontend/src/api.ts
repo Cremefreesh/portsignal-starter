@@ -71,3 +71,51 @@ export async function createPortfolio(
 
   return response.data;
 }
+
+export type ValuedPosition = {
+  position_id: string;
+  ticker: string;
+  quantity: number;
+  average_cost: number;
+  currency: string;
+
+  current_price: number;
+  previous_close: number;
+
+  cost_basis: number;
+  market_value: number;
+
+  total_gain: number;
+  total_gain_percent: number | null;
+
+  day_change: number;
+  day_change_percent: number;
+};
+
+export type PortfolioValuation = {
+  portfolio_id: string;
+  portfolio_name: string;
+  valuation_currency: string;
+
+  total_cost_basis: number;
+  total_market_value: number;
+
+  total_gain: number;
+  total_gain_percent: number | null;
+
+  total_day_change: number;
+  total_day_change_percent: number | null;
+
+  positions: ValuedPosition[];
+  warnings: string[];
+};
+
+export async function getPortfolioValuation(
+  portfolioId: string,
+): Promise<PortfolioValuation> {
+  const response = await api.get<PortfolioValuation>(
+    `/market-data/portfolios/${portfolioId}/valuation`,
+  );
+
+  return response.data;
+}
