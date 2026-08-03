@@ -3,6 +3,7 @@ import {
   PortfolioResponse,
   getPortfolioValuation,
 } from "../api";
+import PortfolioAllocation from "./PortfolioAllocation";
 
 type Props = {
   portfolio: PortfolioResponse;
@@ -223,6 +224,8 @@ export default function PortfolioDetails({
           )}
         </section>
       )}
+
+      <PortfolioAllocation valuation={valuation} />
 
       <section className="card holdings-table-card">
         <div className="holdings-heading">

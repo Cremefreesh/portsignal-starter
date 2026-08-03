@@ -528,3 +528,144 @@ td small {
     grid-column: auto;
   }
 }
+
+.portfolio-selector {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 18px;
+  padding: 18px 20px;
+}
+
+.portfolio-selector-copy {
+  width: min(420px, 100%);
+}
+
+.portfolio-selector-copy select {
+  min-width: 280px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.allocation-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.allocation-card {
+  padding: 26px;
+}
+
+.allocation-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.allocation-total {
+  color: #aab2c2;
+  font-weight: 700;
+}
+
+.allocation-list {
+  display: grid;
+  gap: 20px;
+  margin-top: 28px;
+}
+
+.allocation-row-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 9px;
+}
+
+.allocation-row-heading span {
+  color: #d5dae4;
+  font-weight: 700;
+}
+
+.allocation-track {
+  overflow: hidden;
+  height: 9px;
+  border-radius: 999px;
+  background: #242d3d;
+}
+
+.allocation-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    #596cff,
+    #8f9cff
+  );
+}
+
+.allocation-row small {
+  display: block;
+  margin-top: 7px;
+  color: #778297;
+}
+
+.allocation-stat-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.allocation-stat-card {
+  display: flex;
+  justify-content: center;
+  min-height: 130px;
+  padding: 22px;
+  flex-direction: column;
+}
+
+.allocation-stat-card p {
+  margin-bottom: 10px;
+  color: #8c96aa;
+}
+
+.allocation-stat-card strong {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 1.8rem;
+}
+
+.allocation-stat-card span {
+  color: #778297;
+  font-size: 0.84rem;
+}
+
+@media (max-width: 850px) {
+  .allocation-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .allocation-stat-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .portfolio-selector {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .portfolio-selector-copy select {
+    min-width: 0;
+  }
+
+  .allocation-heading {
+    flex-direction: column;
+  }
+
+  .allocation-stat-grid {
+    grid-template-columns: 1fr;
+  }
+}

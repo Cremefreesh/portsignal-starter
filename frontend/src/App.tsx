@@ -12,6 +12,7 @@ import {
 
 import CreatePortfolioForm from "./components/CreatePortfolioForm";
 import PortfolioDetails from "./components/PortfolioDetails";
+import PortfolioSelector from "./components/PortfolioSelector";
 
 export default function App() {
   const [
@@ -26,49 +27,62 @@ export default function App() {
     setIsCreatingPortfolio,
   ] = useState(false);
 
+  const [
+    isLoadingPortfolio,
+    setIsLoadingPortfolio,
+  ] = useState(false);
+
   const portfoliosQuery = useQuery({
     queryKey: ["portfolios"],
     queryFn: getPortfolios,
   });
 
+  async function selectPortfolio(
+    portfolioId: string,
+  ) {
+    setIsCreatingPortfolio(false);
+    setIsLoadingPortfolio(true);
+
+    try {
+      const portfolio =
+        await getPortfolio(portfolioId);
+
+      setSelectedPortfolio(portfolio);
+    } catch (error) {
+      console.error(
+        "Could not load portfolio",
+        error,
+      );
+    } finally {
+      setIsLoadingPortfolio(false);
+    }
+  }
+
   useEffect(() => {
-    async function loadFirstPortfolio() {
-      if (
-        isCreatingPortfolio ||
-        selectedPortfolio ||
-        !portfoliosQuery.data?.length
-      ) {
-        return;
-      }
-
-      const firstPortfolio =
-        portfoliosQuery.data[0];
-
-      try {
-        const portfolio =
-          await getPortfolio(firstPortfolio.id);
-
-        setSelectedPortfolio(portfolio);
-      } catch (error) {
-        console.error(
-          "Could not load saved portfolio",
-          error,
-        );
-      }
+    if (
+      isCreatingPortfolio ||
+      selectedPortfolio ||
+      !portfoliosQuery.data?.length
+    ) {
+      return;
     }
 
-    void loadFirstPortfolio();
+    void selectPortfolio(
+      portfoliosQuery.data[0].id,
+    );
   }, [
     portfoliosQuery.data,
     selectedPortfolio,
     isCreatingPortfolio,
   ]);
 
-  function handlePortfolioCreated(
+  async function handlePortfolioCreated(
     portfolio: PortfolioResponse,
   ) {
     setSelectedPortfolio(portfolio);
     setIsCreatingPortfolio(false);
+
+    await portfoliosQuery.refetch();
   }
 
   function openCreatePortfolioScreen() {
@@ -84,9 +98,16 @@ export default function App() {
     );
   }
 
+  const portfolios =
+    portfoliosQuery.data ?? [];
+
+  const showCreateScreen =
+    isCreatingPortfolio ||
+    portfolios.length === 0;
+
   return (
     <main className="shell">
-      {!selectedPortfolio ? (
+      {showCreateScreen ? (
         <>
           <header className="app-heading">
             <p className="eyebrow">
@@ -94,17 +115,32 @@ export default function App() {
             </p>
 
             <h1>
-              Understand what your portfolio
-              owns, risks and reacts to.
+              Build a portfolio that understands
+              its own risks.
             </h1>
 
             <p>
-              Create a portfolio to begin
-              tracking live market value,
-              performance and relevant financial
-              news.
+              Add your holdings to track live
+              values, allocation, performance and
+              relevant financial news.
             </p>
           </header>
+
+          {portfolios.length > 0 && (
+            <button
+              className="secondary-button back-button"
+              type="button"
+              onClick={() => {
+                setIsCreatingPortfolio(false);
+
+                void selectPortfolio(
+                  portfolios[0].id,
+                );
+              }}
+            >
+              Back to portfolios
+            </button>
+          )}
 
           <CreatePortfolioForm
             onPortfolioCreated={
@@ -114,19 +150,31 @@ export default function App() {
         </>
       ) : (
         <>
-          <button
-            className="secondary-button back-button"
-            type="button"
-            onClick={
+          <PortfolioSelector
+            portfolios={portfolios}
+            selectedPortfolioId={
+              selectedPortfolio?.id ?? null
+            }
+            isLoading={isLoadingPortfolio}
+            onSelect={selectPortfolio}
+            onCreateNew={
               openCreatePortfolioScreen
             }
-          >
-            Create another portfolio
-          </button>
-
-          <PortfolioDetails
-            portfolio={selectedPortfolio}
           />
+
+          {isLoadingPortfolio ? (
+            <section className="card loading-card">
+              <p className="eyebrow">
+                PORTFOLIO
+              </p>
+
+              <h2>Loading portfolio…</h2>
+            </section>
+          ) : selectedPortfolio ? (
+            <PortfolioDetails
+              portfolio={selectedPortfolio}
+            />
+          ) : null}
         </>
       )}
     </main>
