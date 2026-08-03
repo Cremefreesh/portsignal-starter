@@ -21,6 +21,11 @@ export default function App() {
     null,
   );
 
+  const [
+    isCreatingPortfolio,
+    setIsCreatingPortfolio,
+  ] = useState(false);
+
   const portfoliosQuery = useQuery({
     queryKey: ["portfolios"],
     queryFn: getPortfolios,
@@ -29,6 +34,7 @@ export default function App() {
   useEffect(() => {
     async function loadFirstPortfolio() {
       if (
+        isCreatingPortfolio ||
         selectedPortfolio ||
         !portfoliosQuery.data?.length
       ) {
@@ -40,9 +46,7 @@ export default function App() {
 
       try {
         const portfolio =
-          await getPortfolio(
-            firstPortfolio.id,
-          );
+          await getPortfolio(firstPortfolio.id);
 
         setSelectedPortfolio(portfolio);
       } catch (error) {
@@ -57,7 +61,20 @@ export default function App() {
   }, [
     portfoliosQuery.data,
     selectedPortfolio,
+    isCreatingPortfolio,
   ]);
+
+  function handlePortfolioCreated(
+    portfolio: PortfolioResponse,
+  ) {
+    setSelectedPortfolio(portfolio);
+    setIsCreatingPortfolio(false);
+  }
+
+  function openCreatePortfolioScreen() {
+    setSelectedPortfolio(null);
+    setIsCreatingPortfolio(true);
+  }
 
   if (portfoliosQuery.isLoading) {
     return (
@@ -82,8 +99,8 @@ export default function App() {
             </h1>
 
             <p>
-              Create your first portfolio to
-              begin tracking live market value,
+              Create a portfolio to begin
+              tracking live market value,
               performance and relevant financial
               news.
             </p>
@@ -91,7 +108,7 @@ export default function App() {
 
           <CreatePortfolioForm
             onPortfolioCreated={
-              setSelectedPortfolio
+              handlePortfolioCreated
             }
           />
         </>
@@ -100,8 +117,8 @@ export default function App() {
           <button
             className="secondary-button back-button"
             type="button"
-            onClick={() =>
-              setSelectedPortfolio(null)
+            onClick={
+              openCreatePortfolioScreen
             }
           >
             Create another portfolio
