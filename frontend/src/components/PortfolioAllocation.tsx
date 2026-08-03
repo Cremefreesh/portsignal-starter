@@ -1,4 +1,5 @@
 import { PortfolioValuation } from "../api";
+import PortfolioAllocationChart from "./PortfolioAllocationChart";
 
 type Props = {
   valuation: PortfolioValuation;
@@ -66,6 +67,8 @@ export default function PortfolioAllocation({
   }
 
   return (
+    <>
+    <PortfolioAllocationChart valuation={valuation}/>
     <section className="allocation-layout">
       <article className="card allocation-card">
         <div className="allocation-heading">
@@ -165,5 +168,6 @@ export default function PortfolioAllocation({
         </article>
       </aside>
     </section>
+    </>
   );
 }
