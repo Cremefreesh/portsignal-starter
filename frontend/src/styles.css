@@ -1,10 +1,32 @@
 :root {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
-  color: #f7f8fb;
-  background: #080b12;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  color: #f4f4f5;
+  background: #000000;
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+
+  --bg: #000000;
+  --surface: #0a0a0b;
+  --surface-soft: #111214;
+  --surface-hover: #18191c;
+
+  --border: #2a2b2f;
+  --border-strong: #3a3b40;
+
+  --text: #f4f4f5;
+  --text-muted: #9a9ca3;
+  --text-soft: #74767d;
+
+  --accent: #c7c9cf;
+  --accent-strong: #e1e2e5;
+  --accent-dark: #5c5f66;
+
+  --positive: #75d89a;
+  --negative: #ff8d9b;
+  --warning: #e1c36a;
 }
 
 * { box-sizing: border-box; }
@@ -13,9 +35,14 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+
   background:
-    radial-gradient(circle at top right, rgba(67, 97, 238, 0.16), transparent 30%),
-    #080b12;
+    radial-gradient(
+      circle at top right,
+      rgba(180, 183, 190, 0.08),
+      transparent 32%
+    ),
+    var(--bg);
 }
 
 button { font: inherit; }
@@ -63,10 +90,47 @@ h2 { margin-bottom: 0; }
 }
 
 .card {
-  border: 1px solid #222a3a;
+  border: 1px solid var(--border);
   border-radius: 22px;
-  background: rgba(17, 23, 34, 0.88);
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.2);
+  background: rgba(10, 10, 11, 0.94);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+}
+
+.eyebrow,
+.summary-card p,
+.metric-card span,
+.metric-card small,
+.page-heading > p:last-child,
+.analytics-metric p {
+  color: var(--text-muted);
+}
+
+input,
+select {
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  background: var(--surface);
+}
+
+input:focus,
+select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(199, 201, 207, 0.08);
+}
+
+.primary-button {
+  color: #050505;
+  background: var(--accent-strong);
+}
+
+.secondary-button {
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  background: var(--surface-soft);
+}
+
+.secondary-button:hover {
+  background: var(--surface-hover);
 }
 
 .hero {
@@ -435,14 +499,15 @@ th {
   letter-spacing: -0.045em;
 }
 
-.primary-summary {
+.primary-summary,
+.news-brief {
   background:
     radial-gradient(
       circle at top right,
-      rgba(89, 108, 255, 0.22),
+      rgba(190, 193, 200, 0.12),
       transparent 45%
     ),
-    rgba(17, 23, 34, 0.92);
+    rgba(10, 10, 11, 0.96);
 }
 
 .summary-note {
@@ -601,8 +666,8 @@ td small {
   border-radius: inherit;
   background: linear-gradient(
     90deg,
-    #596cff,
-    #8f9cff
+    #777a81,
+    #d5d6da
   );
 }
 
@@ -741,17 +806,17 @@ td small {
 }
 
 .nav-link {
-  border-radius: 10px;
-  padding: 10px 15px;
-  color: #8c96aa;
-  text-decoration: none;
-  font-weight: 700;
+  color: var(--text-muted);
 }
 
-.nav-link:hover,
+.nav-link:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+
 .nav-link.active {
-  color: #ffffff;
-  background: #222b40;
+  color: #050505;
+  background: var(--accent-strong);
 }
 
 .page-heading {
@@ -850,18 +915,15 @@ td small {
   margin: 18px 0;
 }
 
-.ticker-badges span {
-  border-radius: 8px;
-  padding: 6px 9px;
-  color: #aab6ff;
-  background: #1b2340;
-  font-size: 0.78rem;
-  font-weight: 800;
+.ticker-badges span,
+.category-badge {
+  color: #d8d9dd;
+  background: #202125;
 }
 
 .news-impact {
   margin: 18px 0;
-  border-left: 3px solid #596cff;
+  border-left: 3px solid var(--accent);
   padding-left: 16px;
 }
 
@@ -1050,24 +1112,17 @@ td small {
 }
 
 .nav-link {
-  border-radius: 10px;
-  padding: 10px 14px;
-  color: #8c96aa;
-  text-decoration: none;
-  font-weight: 750;
-  transition:
-    color 120ms ease,
-    background 120ms ease;
+  color: var(--text-muted);
 }
 
 .nav-link:hover {
-  color: #e8ebf3;
-  background: #1a2231;
+  color: var(--text);
+  background: var(--surface-hover);
 }
 
 .nav-link.active {
-  color: #ffffff;
-  background: #29334c;
+  color: #050505;
+  background: var(--accent-strong);
 }
 
 @media (max-width: 900px) {

@@ -24,14 +24,14 @@ type TooltipPayload = {
 };
 
 const CHART_COLOURS = [
-  "#596cff",
-  "#8f9cff",
-  "#73e6a3",
-  "#f4c95d",
-  "#ff8598",
-  "#63c7ff",
-  "#bf8cff",
-  "#ffad66",
+  "#e1e2e5",
+  "#b9bbc1",
+  "#91949b",
+  "#6e7178",
+  "#55585f",
+  "#3e4147",
+  "#c9cbd0",
+  "#7c7f86",
 ];
 
 function formatMoney(

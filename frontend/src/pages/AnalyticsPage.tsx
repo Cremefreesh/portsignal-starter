@@ -199,10 +199,10 @@ export default function AnalyticsPage({
               <Line
                 type="monotone"
                 dataKey="portfolio_value"
-                stroke="#7f8cff"
+                stroke="#c7c9cf"
                 strokeWidth={3}
                 dot={false}
-              />
+                />
             </LineChart>
           </ResponsiveContainer>
         </div>
