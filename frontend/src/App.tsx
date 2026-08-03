@@ -160,18 +160,6 @@ export default function App() {
         </>
       ) : (
         <>
-          <PortfolioSelector
-            portfolios={portfolios}
-            selectedPortfolioId={
-              selectedPortfolio?.id ?? null
-            }
-            isLoading={isLoadingPortfolio}
-            onSelect={selectPortfolio}
-            onCreateNew={
-              openCreatePortfolioScreen
-            }
-          />
-
           {isLoadingPortfolio ? (
             <section className="card loading-card">
               <p className="eyebrow">
