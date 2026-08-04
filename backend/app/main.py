@@ -10,6 +10,12 @@ from app.api.market_data import (
 from app.api.analytics import (
     router as analytics_router,
 )
+from app.api.screener import (
+    router as screener_router,
+)
+from app.api.watchlist import (
+    router as watchlist_router,
+)
 
 settings = get_settings()
 
@@ -31,6 +37,8 @@ app.include_router(portfolios_router, prefix="/api")
 app.include_router(news_router, prefix="/api")
 app.include_router(market_data_router, prefix="/api")
 app.include_router(analytics_router, prefix="/api")
+app.include_router(screener_router, prefix="/api")
+app.include_router(watchlist_router, prefix="/api")
 
 
 @app.get("/health")
