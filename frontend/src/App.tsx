@@ -207,7 +207,7 @@ export default function App() {
                       />
                     }
                   />
-
+                  
                     <Route
                       path="/watchlist"
                       element={<WatchlistPage />}
