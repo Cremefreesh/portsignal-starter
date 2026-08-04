@@ -204,14 +204,6 @@ export default function App() {
                 </section>
               ) : (
                 <Routes>
-                  <Route
-                    path="/"
-                    element={
-                      <PortfolioDetails
-                        portfolio={selectedPortfolio}
-                      />
-                    }
-                  />
 
                   <Route
                     path="/analytics"
