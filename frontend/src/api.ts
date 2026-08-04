@@ -221,3 +221,99 @@ export async function getPortfolioNews(
 
   return response.data;
 }
+
+export type WatchlistItem = {
+  id: string;
+  ticker: string;
+  company_name: string;
+  industry: string | null;
+  logo_url: string | null;
+
+  current_price: number;
+  change: number;
+  change_percent: number;
+  previous_close: number;
+};
+
+export type WatchlistResponse = {
+  id: string;
+  name: string;
+  items: WatchlistItem[];
+  warnings: string[];
+};
+
+export type ScreenerRequest = {
+  tickers: string[];
+  minimum_price: number | null;
+  maximum_price: number | null;
+  minimum_market_cap: number | null;
+  maximum_pe: number | null;
+  minimum_daily_change: number | null;
+  industry: string | null;
+};
+
+export type ScreenerResult = {
+  ticker: string;
+  company_name: string;
+  industry: string | null;
+  exchange: string | null;
+  logo_url: string | null;
+
+  current_price: number;
+  daily_change_percent: number;
+  market_cap_millions: number | null;
+  pe_ratio: number | null;
+  dividend_yield_percent: number | null;
+  fifty_two_week_high: number | null;
+  fifty_two_week_low: number | null;
+};
+
+export type ScreenerResponse = {
+  results: ScreenerResult[];
+  rejected_tickers: string[];
+  warnings: string[];
+};
+
+export async function getWatchlist() {
+  const response =
+    await api.get<WatchlistResponse>(
+      "/watchlist",
+    );
+
+  return response.data;
+}
+
+export async function addWatchlistTicker(
+  ticker: string,
+) {
+  const response =
+    await api.post<WatchlistResponse>(
+      "/watchlist/items",
+      { ticker },
+    );
+
+  return response.data;
+}
+
+export async function removeWatchlistItem(
+  itemId: string,
+) {
+  const response =
+    await api.delete<WatchlistResponse>(
+      `/watchlist/items/${itemId}`,
+    );
+
+  return response.data;
+}
+
+export async function runScreener(
+  payload: ScreenerRequest,
+) {
+  const response =
+    await api.post<ScreenerResponse>(
+      "/screener",
+      payload,
+    );
+
+  return response.data;
+}

@@ -49,6 +49,28 @@ export default function AppNavigation({
           </select>
         </div>
 
+        <NavLink
+            to="/watchlist"
+            className={({ isActive }) =>
+                isActive
+                ? "nav-link active"
+                : "nav-link"
+            }
+            >
+            Watchlist
+            </NavLink>
+
+            <NavLink
+            to="/screener"
+            className={({ isActive }) =>
+                isActive
+                ? "nav-link active"
+                : "nav-link"
+            }
+            >
+            Screener
+            </NavLink>
+
         <button
           className="secondary-button"
           type="button"

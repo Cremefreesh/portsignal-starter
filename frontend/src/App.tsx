@@ -12,6 +12,8 @@ import {
 
 import CreatePortfolioForm from "./components/CreatePortfolioForm";
 import PortfolioDetails from "./components/PortfolioDetails";
+import WatchlistPage from "./pages/WatchlistPage";
+import ScreenerPage from "./pages/ScreenerPage";
 
 
 import {
@@ -205,6 +207,16 @@ export default function App() {
                       />
                     }
                   />
+
+                    <Route
+                      path="/watchlist"
+                      element={<WatchlistPage />}
+                    />
+
+                    <Route
+                      path="/screener"
+                      element={<ScreenerPage />}
+                    />
 
                   <Route
                     path="/news"
