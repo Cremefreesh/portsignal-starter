@@ -79,6 +79,46 @@ class FinnhubClient:
             },
         )
 
+    async def get_company_profile(
+    self,
+    symbol: str,
+    ) -> dict[str, Any]:
+        payload = await self._get(
+            "/stock/profile2",
+            {
+                "symbol": symbol,
+            },
+        )
+
+        if not isinstance(payload, dict):
+            raise FinnhubAPIError(
+                "Finnhub returned an invalid company profile"
+            )
+
+        return payload
+
+
+    async def get_basic_financials(
+        self,
+        symbol: str,
+    ) -> dict[str, Any]:
+        payload = await self._get(
+            "/stock/metric",
+            {
+                "symbol": symbol,
+                "metric": "all",
+            },
+        )
+
+        if not isinstance(payload, dict):
+            raise FinnhubAPIError(
+                "Finnhub returned invalid financial metrics"
+            )
+
+        return payload
+
+
+
     async def get_company_news(
         self,
         symbol: str,
