@@ -317,3 +317,43 @@ export async function runScreener(
 
   return response.data;
 }
+
+export type PositionUpdate = {
+  quantity?: number;
+  average_cost?: number;
+  currency?: string;
+};
+
+export async function addPortfolioPosition(
+  portfolioId: string,
+  position: PositionCreate,
+): Promise<PositionResponse> {
+  const response = await api.post<PositionResponse>(
+    `/portfolios/${portfolioId}/positions`,
+    position,
+  );
+
+  return response.data;
+}
+
+export async function updatePortfolioPosition(
+  portfolioId: string,
+  positionId: string,
+  update: PositionUpdate,
+): Promise<PositionResponse> {
+  const response = await api.patch<PositionResponse>(
+    `/portfolios/${portfolioId}/positions/${positionId}`,
+    update,
+  );
+
+  return response.data;
+}
+
+export async function deletePortfolioPosition(
+  portfolioId: string,
+  positionId: string,
+): Promise<void> {
+  await api.delete(
+    `/portfolios/${portfolioId}/positions/${positionId}`,
+  );
+}

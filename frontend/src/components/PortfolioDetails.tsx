@@ -4,9 +4,12 @@ import {
   getPortfolioValuation,
 } from "../api";
 import PortfolioAllocation from "./PortfolioAllocation";
+import PortfolioPositionManager from "./PortfolioPositionManager";
+import { useQueryClient } from "@tanstack/react-query";
 
 type Props = {
   portfolio: PortfolioResponse;
+  onPortfolioChanged: () => Promise<void>;
 };
 
 function formatMoney(
@@ -46,7 +49,10 @@ function getChangeClass(value: number) {
 
 export default function PortfolioDetails({
   portfolio,
+  onPortfolioChanged,
 }: Props) {
+
+
   const valuationQuery = useQuery({
     queryKey: [
       "portfolio-valuation",
@@ -108,6 +114,40 @@ export default function PortfolioDetails({
       </section>
     );
   }
+
+  const queryClient = useQueryClient();
+
+    async function handlePortfolioChanged() {
+    await onPortfolioChanged();
+
+    await queryClient.invalidateQueries({
+        queryKey: [
+        "portfolio-valuation",
+        portfolio.id,
+        ],
+    });
+
+    await queryClient.invalidateQueries({
+        queryKey: [
+        "portfolio-analytics",
+        portfolio.id,
+        ],
+    });
+
+    await queryClient.invalidateQueries({
+        queryKey: [
+        "portfolio-news",
+        portfolio.id,
+        ],
+    });
+    }
+
+
+
+
+
+
+
 
   const valuation = valuationQuery.data;
 
@@ -226,6 +266,12 @@ export default function PortfolioDetails({
       )}
 
       <PortfolioAllocation valuation={valuation} />
+      <PortfolioPositionManager
+        portfolio={portfolio}
+        onPortfolioChanged={
+            handlePortfolioChanged
+        }
+        />
 
       <section className="card holdings-table-card">
         <div className="holdings-heading">
@@ -252,6 +298,11 @@ export default function PortfolioDetails({
               : "Refresh prices"}
           </button>
         </div>
+
+                <PortfolioPositionManager
+                    portfolio={portfolio}
+                    onPortfolioChanged={onPortfolioChanged}
+                    />
 
         <div className="table-wrapper">
           <table>

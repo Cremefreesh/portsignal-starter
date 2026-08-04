@@ -110,6 +110,20 @@ export default function App() {
     );
   }
 
+  async function reloadSelectedPortfolio() {
+  if (!selectedPortfolio) {
+    return;
+  }
+
+  const refreshed = await getPortfolio(
+    selectedPortfolio.id,
+  );
+
+  setSelectedPortfolio(refreshed);
+
+  await portfoliosQuery.refetch();
+  }
+
   const portfolios =
     portfoliosQuery.data ?? [];
 
@@ -216,6 +230,18 @@ export default function App() {
                     <Route
                       path="/screener"
                       element={<ScreenerPage />}
+                    />
+
+                    <Route
+                      path="/"
+                      element={
+                        <PortfolioDetails
+                          portfolio={selectedPortfolio}
+                          onPortfolioChanged={
+                            reloadSelectedPortfolio
+                          }
+                        />
+                      }
                     />
 
                   <Route
